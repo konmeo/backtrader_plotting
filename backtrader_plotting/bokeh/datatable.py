@@ -15,9 +15,9 @@ class ColummDataType(Enum):
 
 
 class TableGenerator(object):
-    def __init__(self, scheme, cerebro: bt.Cerebro=None):
+    def __init__(self, scheme, cerebro=None):
         self._scheme = scheme
-        self._cerebtro: bt.Cerebro = cerebro
+        self._cerebtro = cerebro
 
     @staticmethod
     def _get_analysis_table_generic(analyzer: bt.analyzers.Analyzer) -> List[List[object]]:
@@ -26,7 +26,7 @@ class TableGenerator(object):
 
         def add_to_table(item: object, baselabel: str=""):
             for ak, av in item.items():
-                label = f"{baselabel} - {ak}" if len(baselabel) > 0 else ak
+                label = "%s - %s" % (baselabel, ak) if len(baselabel) > 0 else ak
                 if isinstance(av, (bt.AutoOrderedDict, OrderedDict)):
                     add_to_table(av, label)
                 else:
@@ -49,7 +49,7 @@ class TableGenerator(object):
         elif ctype == ColummDataType.PERCENTAGE:
             return NumberFormatter(format="0.000 %")
         else:
-            raise Exception(f"Unsupported ColumnDataType: '{ctype}'")
+            raise Exception("Unsupported ColumnDataType: '%s'" % ctype)
 
     def get_analyzers_tables(self, analyzer: bt.analyzers.Analyzer, strategy: bt.Strategy,
                              params: Optional[bt.AutoInfoClass]) -> (Paragraph, List[DataTable]):
@@ -61,14 +61,14 @@ class TableGenerator(object):
 
         # if we have multiple strategies in the mix, add the name of the involved one
         if len(strategy.env.strats) > 0:
-            title += f' ({get_strategy_label(strategy, params)})'
+            title += ' (%s)' % get_strategy_label(strategy, params)
 
-        elems: List[DataTable] = []
+        elems = []
         for table_columns in table_columns_list:
             cds = ColumnDataSource()
             columns = []
             for i, c in enumerate(table_columns):
-                col_name = f'col{i}'
+                col_name = 'col%d' % i
                 cds.add(c[2:], col_name)
                 columns.append(TableColumn(field=col_name, title=c[0], formatter=TableGenerator._get_formatter(c[1])))
             column_height = len(table_columns[0]) * 25

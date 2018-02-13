@@ -12,9 +12,9 @@ def get_nondefault_params(obj: bt.LineBuffer) -> Dict[str, object]:
 def get_strategy_label(strat: bt.Strategy, params: Optional[bt.AutoInfoClass]=None) -> str:
     label = type(strat).__name__
     user_params = get_nondefault_params(params or strat.params)
-    plabs = [f"{x}: {y}" for x, y in user_params.items()]
+    plabs = ['%s: %s' % (x, y) for x, y in user_params.items()]
     plabs = '/'.join(plabs)
-    return f'{label} [{plabs}]'
+    return '%s [%s]' % (label, plabs)
 
 
 def nanfilt(x: List) -> List:

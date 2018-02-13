@@ -41,7 +41,7 @@ class Figure(object):
 
     def __init__(self, strategy: bt.Strategy, cds: ColumnDataSource, hoverc: HoverContainer, start, end, scheme, master_type, plotabove: bool):
         self._strategy = strategy
-        self._cds: ColumnDataSource = cds
+        self._cds = cds
         self._hoverc = hoverc
         self._scheme = scheme
         self._start = start
@@ -134,7 +134,7 @@ class Figure(object):
                 names.append(x._dataname)
             elif isinstance(x, bt.Indicator):
                 names.append(x.plotlabel())
-        return f"({','.join(names)})"
+        return "(%s)" % (','.join(names) if names != [None] else '')
 
     def plot_observer(self, obj, master):
         self.plot_indicator(obj, master)
@@ -216,7 +216,7 @@ class Figure(object):
 
                 glyph_fnc = self.figure.line
             else:
-                raise Exception(f"Unknown plotting method '{method}'")
+                raise Exception("Unknown plotting method '%s'" % method)
 
             renderer = glyph_fnc("datetime", source=self._cds, **kwglyphs)
 
@@ -230,7 +230,7 @@ class Figure(object):
             is_obs = isinstance(obj, bt.Observer)
             if is_obs and master is None:
                 hover_target = self.figure
-            self._hoverc.add_hovertip(f"{indlabel} - {linealias}", f"@{source_id}{{0,0.000}}", hover_target)
+            self._hoverc.add_hovertip("{indlabel} - {linealias}", "@%s{0,0.000}" % source_id, hover_target)
 
             # adapt y-axis if needed
             if master is None or getattr(master.plotinfo, 'plotylimited', False) is False:
@@ -281,7 +281,7 @@ class Figure(object):
         source_id = Figure._source_id(data)
         title = sanitize_source_name(data._name)
         if len(data._env.strats) > 1:
-            title += f" ({get_strategy_label(self._strategy)})"
+            title += " (%s)" % get_strategy_label(self._strategy)
 
         # append to title
         self._figure_append_title(title)
@@ -324,12 +324,12 @@ class Figure(object):
                                       line_color=source_id + 'colors_outline')
             self._set_single_hover_renderer(renderer)
 
-            self._hoverc.add_hovertip("Open", f"@{source_id}open{{0,0.000}}")
-            self._hoverc.add_hovertip("High", f"@{source_id}high{{0,0.000}}")
-            self._hoverc.add_hovertip("Low", f"@{source_id}low{{0,0.000}}")
-            self._hoverc.add_hovertip("Close", f"@{source_id}close{{0,0.000}}")
+            self._hoverc.add_hovertip("Open", "@%sopen{0,0.000}" % source_id)
+            self._hoverc.add_hovertip("High", "@%shigh{0,0.000}" % source_id)
+            self._hoverc.add_hovertip("Low", "@%slow{0,0.000}" % source_id)
+            self._hoverc.add_hovertip("Close", "@%sclose{0,0.000}" % source_id)
         else:
-            raise Exception(f"Unsupported style '{self._scheme.style}'")
+            raise Exception("Unsupported style '%s'" % self._scheme.style)
 
         adapt_yranges(self.figure.y_range, df.low, df.high)
 
@@ -379,4 +379,4 @@ class Figure(object):
             self.figure.y_range.end /= self._scheme.volscaling
 
         self.figure.vbar('datetime', get_bar_length_ms(obj) * 0.7, src_prefix + 'volume', 0, source=self._cds, fill_color=src_prefix + 'volume_colors', line_color="black", **kwargs)
-        self._hoverc.add_hovertip("Volume", f"@{src_prefix}volume{{(0.00 a)}}")
+        self._hoverc.add_hovertip("Volume", "@%svolume{(0.00 a)}" % src_prefix)

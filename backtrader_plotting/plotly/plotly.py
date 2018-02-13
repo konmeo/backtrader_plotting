@@ -56,8 +56,8 @@ class Plotly(object):
                                        )
 
                 if x.plotinfo.subplot:
-                    ind_trace['xaxis'] = f'x{next_plot}'
-                    ind_trace['yaxis'] = f'y{next_plot}'
+                    ind_trace['xaxis'] = 'x{%d}' % next_plot
+                    ind_trace['yaxis'] = 'y{%d}' % next_plot
                 #self._traces.append(ind_trace)
 
 

@@ -23,10 +23,10 @@ from typing import Optional, Union, Tuple
 
 class FigurePage(object):
     def __init__(self):
-        self.figures: List[Figure] = []
-        self.cds: ColumnDataSource = None
-        self.analyzers: List[Tuple[str, bt.Analyzer, bt.Strategy, Optional[bt.AutoInfoClass]]] = []
-        self.strategies: List[bt.Strategy] = None
+        self.figures = []
+        self.cds = None
+        self.analyzers = []
+        self.strategies = None
 
 
 class Bokeh(metaclass=bt.MetaParams):
@@ -43,7 +43,7 @@ class Bokeh(metaclass=bt.MetaParams):
         if not isinstance(self.p.scheme, Scheme):
             raise Exception("Provided scheme has to be a subclass of backtrader_plogging.schemes.scheme.Scheme")
 
-        self._cerebro: bt.Cerebro = cerebro
+        self._cerebro = cerebro
         self._fp = FigurePage()
 
     def _build_graph(self, datas, inds, obs):
@@ -151,7 +151,7 @@ class Bokeh(metaclass=bt.MetaParams):
             for name, a in obj.analyzers.getitems():
                 self._fp.analyzers.append((name, a, strategy, obj.params))
         else:
-            raise Exception(f'Unsupported plot source object: {type(strategy)}')
+            raise Exception('Unsupported plot source object: %s' % type(strategy))
         return [self._fp]
 
     def _plot_strategy(self, strategy: bt.Strategy, start=None, end=None, **kwargs):
@@ -309,7 +309,7 @@ class Bokeh(metaclass=bt.MetaParams):
     def _output_plot_file(self, obj, filename=None, template="basic.html.j2"):
         if filename is None:
             tmpdir = tempfile.gettempdir()
-            filename = os.path.join(tmpdir, f"bt_bokeh_plot_{self._num_plots}.html")
+            filename = os.path.join(tmpdir, "bt_bokeh_plot_%s.html" % self._num_plots)
 
         env = Environment(loader=PackageLoader('backtrader_plotting.bokeh', 'templates'))
         templ = env.get_template(template)
