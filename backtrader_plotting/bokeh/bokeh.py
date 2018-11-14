@@ -245,6 +245,9 @@ class Bokeh(metaclass=bt.MetaParams):
         for f in strat_figures:
             f.figure.legend.background_fill_color = self.p.scheme.legend_background_color
             f.figure.legend.label_text_color = self.p.scheme.legend_text_color
+            f.figure.legend.background_fill_alpha = self.p.scheme.legend_background_alpha
+            f.figure.legend.border_line_alpha = self.p.scheme.legend_border_alpha
+            f.figure.legend.location = self.p.scheme.legend_location
 
         # link axis
         for i in range(1, len(strat_figures)):

@@ -15,6 +15,9 @@ class Scheme(_BtPlotScheme):
 
         self.legend_background_color = '#3C3F41'
         self.legend_text_color = 'lightgrey'
+        self.legend_background_alpha = 0.8
+        self.legend_border_alpha = 0.5
+        self.legend_location = 'top_right'
 
         self.loc = 'lightgray'
         self.background_fill = '#222222'
