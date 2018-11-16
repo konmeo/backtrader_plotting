@@ -67,8 +67,13 @@ class TableGenerator(object):
             columns = []
             for i, c in enumerate(table_columns):
                 col_name = f'col{i}'
+                if type(c[1]) is tuple:
+                    col_formatter, col_width = c[1]
+                else:
+                    col_formatter = c[1]
+                    col_width = 0
                 cds.add(c[2:], col_name)
-                columns.append(TableColumn(field=col_name, title=c[0], formatter=self._get_formatter(c[1])))
+                columns.append(TableColumn(field=col_name, title=c[0], formatter=self._get_formatter(col_formatter), width=col_width))
             column_height = len(table_columns[0]) * 25
             elems.append(DataTable(source=cds, columns=columns, width=table_width, height=column_height, index_position=None))
         return Paragraph(text=title, width=table_width, style={'font-size': 'large'}), elems
