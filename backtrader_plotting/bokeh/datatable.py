@@ -40,9 +40,14 @@ class TableGenerator(object):
 
     def _get_formatter(self,ctype: ColummDataType):
         if ctype == ColummDataType.FLOAT:
-            return NumberFormatter(format=self._scheme.number_format, text_align="right")
+            return HTMLTemplateFormatter(template="""
+                <div style="<%= (() => (value < 0 ? 'color: tomato;' : ''))() %>text-align: right;">
+                    <%= value.toLocaleString(undefined, { minimumFractionDigits: 2,
+                                                          maximumFractionDigits: 2 }) %></div>""")
         elif ctype == ColummDataType.INT:
-            return NumberFormatter(text_align="right")
+            return HTMLTemplateFormatter(template="""
+                <div style="<%= (() => (value < 0 ? 'color: tomato;' : ''))() %>
+                  text-align: right;"><%= Math.trunc(value).toLocaleString() %></div>""")
         elif ctype == ColummDataType.DATETIME:
             return DateFormatter(format="%D %R")
         elif ctype == ColummDataType.STRING:
@@ -50,7 +55,10 @@ class TableGenerator(object):
         elif ctype == ColummDataType.CENTER_STRING:
             return StringFormatter(text_align="center")
         elif ctype == ColummDataType.PERCENTAGE:
-            return NumberFormatter(format="0.000 %", text_align="right")
+            return HTMLTemplateFormatter(template="""
+                <div style="<%= (() => (value < 0 ? 'color: tomato;' : ''))() %>text-align: right;">
+                    <%= value.toLocaleString(undefined, { minimumFractionDigits: 2,
+                                                          maximumFractionDigits: 2 }) + ' %' %></div>""")
         else:
             raise Exception(f"Unsupported ColumnDataType: '{ctype}'")
 
