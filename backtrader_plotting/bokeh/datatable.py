@@ -12,6 +12,7 @@ class ColummDataType(Enum):
     INT = 3
     PERCENTAGE = 4
     STRING = 5
+    CENTER_STRING = 6
 
 
 class TableGenerator(object):
@@ -45,6 +46,8 @@ class TableGenerator(object):
             return DateFormatter(format="%D %R")
         elif ctype == ColummDataType.STRING:
             return StringFormatter()
+        elif ctype == ColummDataType.CENTER_STRING:
+            return StringFormatter(text_align="center")
         elif ctype == ColummDataType.PERCENTAGE:
             return NumberFormatter(format="0.000 %")
         else:
