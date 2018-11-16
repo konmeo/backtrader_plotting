@@ -1,6 +1,7 @@
 import backtrader as bt
 from collections import OrderedDict
-from bokeh.models import ColumnDataSource, Paragraph, TableColumn, DataTable, DateFormatter, NumberFormatter, StringFormatter, Widget
+from bokeh.models import ColumnDataSource, Paragraph, TableColumn, DataTable, \
+        DateFormatter, StringFormatter, HTMLTemplateFormatter
 from typing import List
 from enum import Enum
 from ..utils import get_params_str
@@ -39,9 +40,9 @@ class TableGenerator(object):
 
     def _get_formatter(self,ctype: ColummDataType):
         if ctype == ColummDataType.FLOAT:
-            return NumberFormatter(format=self._scheme.number_format)
+            return NumberFormatter(format=self._scheme.number_format, text_align="right")
         elif ctype == ColummDataType.INT:
-            return NumberFormatter()
+            return NumberFormatter(text_align="right")
         elif ctype == ColummDataType.DATETIME:
             return DateFormatter(format="%D %R")
         elif ctype == ColummDataType.STRING:
@@ -49,7 +50,7 @@ class TableGenerator(object):
         elif ctype == ColummDataType.CENTER_STRING:
             return StringFormatter(text_align="center")
         elif ctype == ColummDataType.PERCENTAGE:
-            return NumberFormatter(format="0.000 %")
+            return NumberFormatter(format="0.000 %", text_align="right")
         else:
             raise Exception(f"Unsupported ColumnDataType: '{ctype}'")
 
