@@ -296,7 +296,7 @@ class Bokeh(metaclass=bt.MetaParams):
         if panel_analyzers is not None:
             panels.append(panel_analyzers)
 
-        return Tabs(tabs=panels)
+        return Tabs(tabs=panels, active=self.p.scheme.active_tab)
 
     def _generate_model_tabs(self, fp: FigurePage):
         figs = list(fp.figures)
@@ -320,7 +320,7 @@ class Bokeh(metaclass=bt.MetaParams):
         if p_analyzers is not None:
             panels.append(p_analyzers)
 
-        return Tabs(tabs=panels)
+        return Tabs(tabs=panels, active=self.p.scheme.active_tab)
     # endregion
 
     def _get_analyzer_tab(self, fp: FigurePage) -> Optional[Panel]:

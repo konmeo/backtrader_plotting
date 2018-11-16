@@ -44,6 +44,7 @@ class Scheme(_BtPlotScheme):
         self.plot_height_indicator = 400
         self.plot_height_observer = 400
         self.plot_mode = "tabs"
+        self.active_tab = 0
 
         self.tooltip_background_color = '#4C4F51'
         self.tooltip_text_label_color = '#848EFF'
